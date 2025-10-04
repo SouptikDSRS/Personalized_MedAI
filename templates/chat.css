@@ -1,0 +1,282 @@
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #34495e;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    margin: 0;
+    position: relative; /* Needed for sidebar positioning */
+}
+
+/* Header/Footer consistency */
+.header-footer-bg {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+.footer-bg {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+
+/* Main chat layout */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 1rem; /* Slightly reduced padding */
+    gap: 2rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ------------------------------------------------------------------
+ * 🎨 SIDEBAR STYLING: DESKTOP vs MOBILE OVERLAY
+ * ------------------------------------------------------------------
+ */
+
+.sidebar {
+    /* DEFAULT (DESKTOP) STYLES */
+    width: 280px;
+    min-width: 280px; 
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    height: fit-content;
+    position: sticky;
+    top: 80px; /* Adjusted sticky top */
+    transition: all 0.3s ease-in-out;
+}
+
+/* MOBILE OVERLAY STYLES (Applies by default below LG breakpoint) */
+@media (max-width: 1023px) {
+    .sidebar {
+        position: fixed; /* Make it an overlay */
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 300px; /* Fixed width for mobile */
+        max-width: 80%;
+        min-width: unset;
+        z-index: 60; /* Above everything else */
+        transform: translateX(-100%); /* Hides the sidebar off-screen */
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 0;
+        height: 100vh;
+        padding-top: 3rem;
+        overflow-y: auto;
+    }
+    
+    /* When the 'sidebar-open' class is added to the body, slide it in */
+    body.sidebar-open .sidebar {
+        transform: translateX(0);
+    }
+    
+    /* Optional: Add a subtle overlay to the main content when sidebar is open */
+    body.sidebar-open::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 55;
+    }
+}
+
+/* Hide the toggle button on large screens */
+@media (min-width: 1024px) {
+    #sidebarToggle {
+        display: none;
+    }
+}
+
+
+/* ------------------------------------------------------------------
+ * 💬 CHAT CONTAINER STYLING
+ * ------------------------------------------------------------------
+ */
+
+.chat-container {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 120px); /* Taller on mobile to fill space */
+    min-height: 500px;
+}
+
+.chat-header {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+}
+.chat-header h2 {
+    font-size: 1.5rem; /* Slightly smaller for friendliness */
+    font-weight: 700;
+    color: #2980b9;
+}
+.chat-header p {
+    color: #7f8c8d;
+}
+
+.chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #fdfdfe;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    scroll-behavior: smooth;
+}
+
+/* ------------------------------------------------------------------
+ * 🗣️ MESSAGE BUBBLE STYLES
+ * ------------------------------------------------------------------
+ */
+
+.message-bubble {
+    max-width: 85%; /* Increased max-width for better use of mobile screen */
+    padding: 12px 18px;
+    border-radius: 20px;
+    position: relative;
+    word-wrap: break-word;
+    animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message-bubble.user {
+    background-color: #3498db;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+
+.message-bubble.ai {
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+    background-color: transparent; 
+    color: inherit; 
+    padding: 0; 
+}
+.message-bubble.ai .formatted-ai-response { 
+    background-color: #ecf0f1;
+    color: #34495e;
+    padding: 12px 18px;
+    border-radius: 20px;
+    line-height: 1.5; /* Increased line-height for easier reading */
+}
+
+.message-bubble .timestamp {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 3px;
+    display: block;
+    text-align: right;
+}
+.message-bubble.ai .timestamp {
+    text-align: left;
+}
+
+
+/* ------------------------------------------------------------------
+ * ✍️ CHAT INPUT & BUTTONS
+ * ------------------------------------------------------------------
+ */
+
+.chat-input-form {
+    padding: 1rem; /* Smaller padding on input area */
+    background-color: #fcfcfc;
+    border-top: 1px solid #e0e0e0;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+.chat-input-group {
+    display: flex;
+    gap: 0.5rem; /* Smaller gap */
+}
+.chat-input-group input {
+    flex-grow: 1;
+    padding: 12px 15px; /* Smaller input padding */
+    border: 1px solid #dfe6e9;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.send-button {
+    background-color: #27ae60;
+    color: white;
+    padding: 10px 15px; /* Smaller padding for better fit */
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.send-button:hover {
+    background-color: #219d53;
+    transform: translateY(-1px);
+}
+
+
+/* Sidebar Session Styles */
+.session-item {
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-left: 3px solid transparent;
+}
+.session-item.active {
+    background-color: #e8f4fd;
+    border-left-color: #3498db;
+    font-weight: 600;
+}
+
+.new-chat-button {
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+
+/* ------------------------------------------------------------------
+ * 📱 MOBILE SPECIFIC TWEAKS (Under 640px)
+ * ------------------------------------------------------------------
+ */
+
+@media (max-width: 640px) {
+    .main-content {
+        padding: 0.5rem;
+    }
+    .chat-container {
+        height: calc(100vh - 100px); /* Use maximum space */
+        border-radius: 0; /* Full width chat box */
+        box-shadow: none;
+    }
+    .chat-input-form {
+        border-radius: 0;
+    }
+    /* Hide the "Send" text on tiny screens */
+    .send-button span {
+        display: none;
+    }
+}

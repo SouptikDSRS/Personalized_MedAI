@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Health AI - Login / Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f4f8; /* Softer, cooler light background */
+      color: #2c3e50; /* Darker, more professional text */
+      line-height: 1.7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .auth-container {
+      background-color: #ffffff;
+      border-radius: 16px; /* More rounded corners */
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+      max-width: 480px;
+      width: 100%;
+      padding: 40px;
+      box-sizing: border-box;
+      border: 1px solid #e2e8f0;
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .auth-header .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .auth-header .logo svg {
+      color: #28a745; /* Primary green */
+      width: 45px;
+      height: 45px;
+    }
+
+    .auth-header .logo span {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #1e88e5; /* Vibrant blue */
+    }
+
+    .tab-buttons {
+      display: flex;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #6c757d;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab-button.active {
+      color: #007bff; /* Secondary blue */
+      border-bottom-color: #007bff;
+    }
+
+    .tab-button:hover:not(.active) {
+      color: #343a40;
+      background-color: #f8f9fa;
+    }
+
+    /* Input group for floating labels */
+    .input-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+    .input-group label {
+      position: absolute;
+      top: 12px;
+      left: 15px;
+      color: #6c757d;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: all 0.2s ease-out;
+      transform-origin: left top;
+      z-index: 1;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      background-color: #f8f9fa; /* Light background for inputs */
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+      background-color: #ffffff;
+    }
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+      top: -10px;
+      left: 10px;
+      font-size: 0.8rem;
+      color: #007bff;
+      background: #ffffff;
+      padding: 0 5px;
+      z-index: 2;
+    }
+
+    /* Button styling with gradient */
+    .auth-button {
+      width: 100%;
+      padding: 14px 20px;
+      background-image: linear-gradient(to right, #28a745, #007bff); /* Green to Blue */
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 9999px; /* Fully rounded */
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 8px 20px rgba(0, 123, 255, 0.25); /* Blue shadow */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .auth-button:hover {
+      background-image: linear-gradient(to right, #218838, #0056b3); /* Darker on hover */
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0, 123, 255, 0.35);
+    }
+    .auth-button:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+    }
+
+    /* Message styling */
+    .message {
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-weight: 500;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .message.loading {
+      background-color: #e2e6ea;
+      color: #495057;
+      border: 1px solid #dae0e5;
+    }
+
+    /* Spinner animation */
+    .spinner {
+      border: 3px solid #f3f3f3; /* Light grey */
+      border-top: 3px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .auth-container {
+        padding: 30px 20px;
+        margin: 10px;
+      }
+
+      .auth-header .logo span {
+        font-size: 2rem;
+      }
+
+      .tab-button {
+        font-size: 1rem;
+        padding: 12px 0;
+      }
+
+      .input-group input {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+      }
+
+      .auth-button {
+        padding: 12px 15px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pill">
+          <path d="m10.5 20.5 9-9a4.24 4.24 0 0 0-6-6l-9 9a4.24 4.24 0 0 0 6 6Z"/><path d="m8 8 6 6"/>
+        </svg>
+        <span>Health AI</span>
+      </div>
+      <p class="text-gray-600">Your Intelligent Health Companion</p>
+    </div>
+
+    <div class="tab-buttons">
+      <button id="loginTabBtn" class="tab-button active">Login</button>
+      <button id="signupTabBtn" class="tab-button">Sign Up</button>
+    </div>
+
+    <!-- Login Form Section -->
+    <div id="loginFormSection" class="form-section">
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="input-group">
+          <input type="email" id="loginEmail" placeholder=" " required>
+          <label for="loginEmail">Email</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="loginPassword" placeholder=" " required>
+          <label for="loginPassword">Password</label>
+        </div>
+        <button type="submit" class="auth-button">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+        <div id="loginMessage" class="message hidden"></div>
+      </form>
+    </div>
+
+    <!-- Sign Up Form Section -->
+    <div id="signupFormSection" class="form-section hidden">
+      <form id="signupForm" onsubmit="handleSignUp(event)">
+        <div class="input-group">
+          <input type="text" id="signupName" placeholder=" " required>
+          <label for="signupName">Full Name</label>
+        </div>
+        <div class="input-group">
+          <input type="email" id="signupEmail" placeholder=" " required>
+          <label for="signupEmail">Email Address</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="signupPassword" placeholder=" " required>
+          <label for="signupPassword">Password (min 6 characters)</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="confirmPassword" placeholder=" " required>
+          <label for="confirmPassword">Confirm Password</label>
+        </div>
+        <button type="submit" class="auth-button">
+          <i class="fas fa-user-plus"></i> Sign Up
+        </button>
+        <div id="signupMessage" class="message hidden"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase and Auth Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      updateProfile 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { 
+      getFirestore, 
+      doc, 
+      setDoc 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+    // Firebase configuration - Use your actual project details
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAu-9P8Lo3giJ9hFBiDR6T5eM0NuUnJoQ",
+      authDomain: "ai-health-web.firebaseapp.com",
+      projectId: "ai-health-web",
+      storageBucket: "ai-health-web.appspot.com",
+      messagingSenderId: "504572356636",
+      appId: "1:504572356636:web:2002a4ebab9474177ad7d9",
+      measurementId: "G-MZ4Z3ZDJ9R"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app); // Initialize analytics
+
+    // UI Elements
+    const loginTabBtn = document.getElementById('loginTabBtn');
+    const signupTabBtn = document.getElementById('signupTabBtn');
+    const loginFormSection = document.getElementById('loginFormSection');
+    const signupFormSection = document.getElementById('signupFormSection');
+    const loginMessageDiv = document.getElementById('loginMessage');
+    const signupMessageDiv = document.getElementById('signupMessage');
+
+    // Input Fields
+    const loginEmailInput = document.getElementById('loginEmail');
+    const loginPasswordInput = document.getElementById('loginPassword');
+    const signupNameInput = document.getElementById('signupName');
+    const signupEmailInput = document.getElementById('signupEmail');
+    const signupPasswordInput = document.getElementById('signupPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+
+    // Function to display messages with icons and styling
+    function displayMessage(element, type, message, showSpinner = false) {
+      element.classList.remove('hidden', 'success', 'error', 'loading');
+      element.innerHTML = ''; // Clear previous content
+
+      if (showSpinner) {
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner';
+        element.appendChild(spinner);
+      }
+
+      const icon = document.createElement('i');
+      if (type === 'success') {
+        icon.className = 'fas fa-check-circle mr-2';
+      } else if (type === 'error') {
+        icon.className = 'fas fa-times-circle mr-2';
+      } else if (type === 'loading') {
+        icon.className = 'fas fa-spinner fa-spin mr-2'; // Spinner icon for loading
+      }
+      element.appendChild(icon);
+
+      const textSpan = document.createElement('span');
+      textSpan.textContent = message;
+      element.appendChild(textSpan);
+      element.classList.add(type);
+      element.classList.remove('hidden');
+    }
+
+    // Tab switching logic
+    function showTab(tabName) {
+      if (tabName === 'login') {
+        loginTabBtn.classList.add('active');
+        signupTabBtn.classList.remove('active');
+        loginFormSection.classList.remove('hidden');
+        signupFormSection.classList.add('hidden');
+      } else {
+        signupTabBtn.classList.add('active');
+        loginTabBtn.classList.remove('active');
+        signupFormSection.classList.remove('hidden');
+        loginFormSection.classList.add('hidden');
+      }
+      // Clear messages when switching tabs
+      loginMessageDiv.classList.add('hidden');
+      signupMessageDiv.classList.add('hidden');
+    }
+
+    loginTabBtn.addEventListener('click', () => showTab('login'));
+    signupTabBtn.addEventListener('click', () => showTab('signup'));
+
+    // Handle Login
+    async function handleLogin(event) {
+      event.preventDefault();
+      const email = loginEmailInput.value.trim();
+      const password = loginPasswordInput.value;
+
+      if (!email || !password) {
+        displayMessage(loginMessageDiv, 'error', 'Please enter both email and password.');
+        return;
+      }
+
+      displayMessage(loginMessageDiv, 'loading', 'Logging in...', true);
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        displayMessage(loginMessageDiv, 'success', 'Login successful! Redirecting...');
+        console.log('User logged in:', user.uid);
+
+        // Redirect to homepage after successful login
+        setTimeout(() => {
+          window.location.href = '/templates/index.html'; // Relative path
+        }, 1500); // Give user a moment to see success message
+      } catch (error) {
+        let errorMessage = 'An unexpected error occurred.';
+        switch (error.code) {
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email format.';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'This account has been disabled.';
+            break;
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            errorMessage = 'Invalid email or password.';
+            break;
+          case 'auth/too-many-requests':
+            errorMessage = 'Too many failed login attempts. Please try again later.';
+            break;
+          default:
+            errorMessage = error.message;
+            break;
+        }
+        displayMessage(loginMessageDiv, 'error', errorMessage);
+        console.error('Login error:', error);
+      }
+    }
+
+    // Handle Sign Up
+    async function handleSignUp(event) {
+      event.preventDefault();
+      const name = signupNameInput.value.trim();
+      const email = signupEmailInput.value.trim();
+      const password = signupPasswordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      if (!name || !email || !password || !confirmPassword) {
+        displayMessage(signupMessageDiv, 'error', 'Please fill in all fields.');
+        return;
+      }
+      if (password.length < 6) {
+        displayMessage(signupMessageDiv, 'error', 'Password must be at least 6 characters long.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        displayMessage(signupMessageDiv, 'error', 'Passwords do not match.');
+        return;
+      }
+
+      displayMessage(signupMessageDiv, 'loading', 'Signing up...', true);
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Set display name in Firebase Auth profile
+        await updateProfile(user, { displayName: name });
+
+        // Create user profile in Firestore with initial health-related fields as null
+        await setDoc(doc(db, "users", user.uid), {
+          fullName: name,
+          email: email,
+          dateOfBirth: null,
+          gender: null,
+          height: null,
+          weight: null,
+          activityLevel: null,
+          healthGoals: null,
+          allergies: null,
+          preExistingConditions: null,
+          lastUpdated: new Date().toISOString().slice(0, 10)
+        });
+
+        displayMessage(signupMessageDiv, 'success', 'Account created successfully! You can now log in.');
+        console.log('User signed up and profile created:', user.uid);
+
+        // Automatically switch to login tab after successful signup
+        setTimeout(() => {
+          showTab('login');
+          // Clear signup form fields
+          signupNameInput.value = '';
+          signupEmailInput.value = '';
+          signupPasswordInput.value = '';
+          confirmPasswordInput.value = '';
+        }, 1500); // Give user a moment to see success message
+      } catch (error) {
+        let errorMessage = 'An unexpected error occurred during sign up.';
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'This email address is already in use.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Invalid email address format.';
+            break;
+          case 'auth/weak-password':
+            errorMessage = 'Password is too weak. Please choose a stronger one.';
+            break;
+          default:
+            errorMessage = error.message;
+            break;
+        }
+        displayMessage(signupMessageDiv, 'error', errorMessage);
+        console.error('Sign up error:', error);
+      }
+    }
+
+    // Expose handlers globally for form usage
+    window.handleSignUp = handleSignUp;
+    window.handleLogin = handleLogin;
+  </script>
+</body>
+</html>

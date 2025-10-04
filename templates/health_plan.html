@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Personalized Health Plan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f4f8; /* Softer, cooler light background */
+      color: #2c3e50; /* Darker, more professional text */
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Header/Footer consistency */
+    .header-footer-bg {
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .footer-bg {
+      background-color: #1a202c; /* Darker for footer */
+      color: #cbd5e0;
+    }
+
+    .container-card {
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      padding: 20px; /* Reduced padding for mobile */
+      box-sizing: border-box;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Mobile-first adjustment for padding */
+    @media (min-width: 640px) {
+      .container-card {
+        padding: 40px; /* Original padding for larger screens */
+      }
+    }
+
+    .section-title {
+      font-size: 1.5rem; /* Slightly smaller for mobile */
+      font-weight: 700;
+      color: #2980b9;
+      margin-bottom: 0.75rem; /* Reduced margin for mobile */
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 0.5rem;
+    }
+
+    /* Original size for larger screens */
+    @media (min-width: 640px) {
+      .section-title {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+      }
+    }
+
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db; /* Adjusted border width for better mobile display */
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .info-message, .error-message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-weight: 500;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .info-message {
+      background-color: #e8f4fd;
+      color: #2980b9;
+      border: 1px solid #bbdefb;
+    }
+    .error-message {
+      background-color: #fdeaea;
+      color: #c0392b;
+      border: 1px solid #f5c6cb;
+    }
+    .hidden {
+      display: none !important;
+    }
+
+    /* Print specific styles */
+    @media print {
+      body {
+        background-color: #fff;
+        color: #000;
+      }
+      header, footer, .action-buttons, .form-section, .chat-section {
+        display: none;
+      }
+      .main-content {
+        padding: 0;
+        margin: 0;
+        display: block;
+      }
+      .container-card {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        width: 100%;
+        max-width: none;
+      }
+      .section-title {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 0.25rem;
+        margin-bottom: 0.75rem;
+        font-size: 1.5rem;
+      }
+      .content-block {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <header class="header-footer-bg py-4 px-4 sm:px-8 flex justify-between items-center sticky top-0 z-50">
+    <div class="flex items-center space-x-2 sm:space-x-4">
+      <a href="/templates/index.html" class="flex items-center space-x-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pill text-green-600 sm:w-10 sm:h-10">
+          <path d="m10.5 20.5 9-9a4.24 4.24 0 0 0-6-6l-9 9a4.24 4.24 0 0 0 6 6Z"/><path d="m8 8 6 6"/>
+        </svg>
+        <span class="text-xl sm:text-3xl font-extrabold text-gray-900">Health AI</span>
+      </a>
+    </div>
+    <div>
+      <a href="/templates/index.html" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 sm:py-2.5 sm:px-5 rounded-full shadow-lg transition duration-300 ease-in-out flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base transform hover:scale-105">
+        <i class="fas fa-home text-lg"></i>
+        <span class="hidden sm:inline">Back to Home</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="main-content flex-grow flex justify-center py-6 px-3 sm:py-12 sm:px-4">
+    <div id="healthPlanContainer" class="container-card w-full max-w-4xl">
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-center text-blue-800 mb-6 sm:mb-8">
+        <i class="fas fa-heartbeat mr-2 sm:mr-3"></i> Your Personalized Health Plan
+      </h1>
+
+      <div class="p-4 sm:p-6 border rounded bg-white shadow mb-6 form-section">
+        <h2 class="text-xl font-semibold mb-3">Customize Health Input</h2>
+        <form id="healthInputForm" class="space-y-3">
+          <div class="flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0 space-y-3">
+            <label class="flex-1 block">Height (cm): 
+              <input type="number" id="heightInput" class="border p-2 rounded w-full mt-1" placeholder="e.g. 175" />
+            </label>
+            <label class="flex-1 block">Weight (kg): 
+              <input type="number" id="weightInput" class="border p-2 rounded w-full mt-1" placeholder="e.g. 70" />
+            </label>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row sm:space-x-4 sm:space-y-0 space-y-3">
+            <label class="flex-1 block">Goal: 
+              <select id="goalInput" class="border p-2 rounded w-full mt-1">
+                <option value="Lose weight">Lose weight</option>
+                <option value="Gain muscle">Gain muscle</option>
+                <option value="Maintain">Maintain weight</option>
+              </select>
+            </label>
+            <label class="flex-1 block">Region:
+              <select id="regionInput" class="border p-2 rounded w-full mt-1">
+                <option value="India">India</option>
+                <option value="South India">South India</option>
+                <option value="Bengal">Bengal</option>
+                <option value="North India">North India</option>
+              </select>
+            </label>
+          </div>
+          
+          <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2.5 rounded hover:bg-blue-700 transition duration-300 ease-in-out mt-4 font-semibold">Generate New Plan</button>
+        </form>
+      </div>
+
+      <div id="loadingState" class="text-center">
+        <div class="loading-spinner"></div>
+        <p class="text-lg text-gray-700 mt-4">Generating your personalized health plan...</p>
+      </div>
+
+      <div id="errorMessage" class="error-message hidden">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span></span>
+      </div>
+
+      <div id="healthPlanContent" class="hidden">
+        <div class="mb-6 content-block bg-white p-5 sm:p-6 rounded-xl shadow-md border border-gray-200">
+          <h2 class="section-title flex items-center gap-2 sm:gap-3">
+            <i class="fas fa-chart-bar text-blue-500"></i> BMI Explanation
+          </h2>
+          <p id="bmiExplanation" class="text-gray-700 leading-relaxed"></p>
+        </div>
+
+        <div class="mb-6 content-block bg-white p-5 sm:p-6 rounded-xl shadow-md border border-gray-200">
+          <h2 class="section-title flex items-center gap-2 sm:gap-3">
+            <i class="fas fa-fire text-red-500"></i> Calorie Suggestions
+          </h2>
+          <p id="calorieSuggestions" class="text-gray-700 leading-relaxed"></p>
+        </div>
+
+        <div class="mb-6 content-block bg-white p-5 sm:p-6 rounded-xl shadow-md border border-gray-200">
+          <h2 class="section-title flex items-center gap-2 sm:gap-3">
+            <i class="fas fa-utensils text-green-500"></i> 1-Day Meal Plan
+          </h2>
+          <div id="mealPlan" class="text-gray-700 space-y-3 sm:space-y-4"></div>
+        </div>
+
+        <div class="mb-6 content-block bg-white p-5 sm:p-6 rounded-xl shadow-md border border-gray-200">
+          <h2 class="section-title flex items-center gap-2 sm:gap-3">
+            <i class="fas fa-lightbulb text-yellow-500"></i> Health Tip
+          </h2>
+          <p id="healthTip" class="text-gray-700 italic leading-relaxed border-l-4 border-green-500 pl-4 py-2 bg-green-50 rounded-md text-sm sm:text-base"></p>
+        </div>
+
+        <div class="action-buttons flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-8 sm:mt-10">
+          <button id="savePdfButton" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out flex items-center justify-center space-x-2 transform hover:scale-105">
+            <i class="fas fa-file-pdf"></i>
+            <span>Save as PDF</span>
+          </button>
+          <button id="printButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-full shadow-lg transition duration-300 ease-in-out flex items-center justify-center space-x-2 transform hover:scale-105">
+            <i class="fas fa-print"></i>
+            <span>Print Report</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t chat-section">
+        <h2 class="text-lg font-semibold mb-2">Ask Questions About Your Plan</h2>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input id="followUpInput" type="text" class="border p-2 flex-grow rounded-md" placeholder="e.g. Can I replace rice with oats?">
+          <button id="followUpBtn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out font-semibold">Ask</button>
+        </div>
+        <div id="followUpAnswer" class="mt-4 p-3 bg-gray-50 border rounded text-gray-800"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer-bg py-4 mt-auto shadow-inner px-4">
+    <div class="container mx-auto text-center text-xs sm:text-sm">
+      <p class="mb-1 sm:mb-2">&copy; 2025 Health AI. All rights reserved.</p>
+      <p class="text-gray-400">Disclaimer: This assistant provides general health information and is not a substitute for professional medical advice. Always consult a healthcare provider for diagnosis and treatment.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+    // Global variables for Firebase config and auth token
+    const firebaseConfig = {
+      apiKey: "AIzaSyDAu-9P8Lo3giJ9hFBiDR6T5eM0NuUnJoQ",
+      authDomain: "ai-health-web.firebaseapp.com",
+      projectId: "ai-health-web",
+      storageBucket: "ai-health-web.firebasestorage.app",
+      messagingSenderId: "504572356636",
+      appId: "1:504572356636:web:2002a4ebab9474177ad7d9",
+      measurementId: "G-MZ4Z3ZDJ9R"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    // UI Elements
+    const loadingState = document.getElementById('loadingState');
+    const errorMessageDiv = document.getElementById('errorMessage');
+    const errorMessageSpan = errorMessageDiv.querySelector('span');
+    const healthPlanContent = document.getElementById('healthPlanContent');
+    const bmiExplanationElem = document.getElementById('bmiExplanation');
+    const calorieSuggestionsElem = document.getElementById('calorieSuggestions');
+    const mealPlanElem = document.getElementById('mealPlan');
+    const healthTipElem = document.getElementById('healthTip');
+    const savePdfButton = document.getElementById('savePdfButton');
+    const printButton = document.getElementById('printButton');
+    const healthInputForm = document.getElementById('healthInputForm');
+    const heightInput = document.getElementById('heightInput');
+    const weightInput = document.getElementById('weightInput');
+    const goalInput = document.getElementById('goalInput');
+    const regionInput = document.getElementById('regionInput');
+    const followUpInput = document.getElementById('followUpInput');
+    const followUpBtn = document.getElementById('followUpBtn');
+    const followUpAnswer = document.getElementById('followUpAnswer');
+
+    let currentUserUID = null;
+    let currentHealthPlan = null;
+    let lastHealthPlanText = ''; // New variable to store plan content for follow-up questions
+
+    // --- Utility Functions ---
+
+    /**
+     * Displays an error message to the user and hides other content.
+     * @param {string} message - The error message to display.
+     */
+    function displayError(message) {
+      loadingState.classList.add('hidden');
+      healthPlanContent.classList.add('hidden');
+      errorMessageSpan.textContent = message;
+      errorMessageDiv.classList.remove('hidden');
+    }
+
+    /**
+     * Saves user health data to the backend.
+     * @param {string} uid - The user's unique ID.
+     * @param {number} height - User's height in cm.
+     * @param {number} weight - User's weight in kg.
+     * @param {string} goal - User's health goal.
+     * @param {string} region - User's region.
+     */
+    async function saveUserData(uid, height, weight, goal, region) {
+      try {
+        const response = await fetch('http://localhost:5000/save_user_data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: uid,
+            height,
+            weight,
+            goal,
+            region
+          })
+        });
+        if (!response.ok) {
+          console.error('Failed to save user data:', await response.json());
+        }
+      } catch (error) {
+        console.error("Error saving user data:", error);
+      }
+    }
+
+    /**
+     * Fetches user health data from the backend.
+     * @param {string} uid - The user's unique ID.
+     * @returns {Promise<Object|null>} A promise that resolves to the user data or null if not found/error.
+     */
+    async function fetchUserData(uid) {
+      try {
+        const response = await fetch(`http://localhost:5000/get_user_data?userId=${uid}`);
+        if (!response.ok) {
+          console.error('Failed to fetch user data:', await response.json());
+          return null;
+        }
+        return await response.json();
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        return null;
+      }
+    }
+
+    // --- Main Application Logic ---
+
+    /**
+     * Fetches and displays the personalized health plan.
+     * @param {string} uid - The user's unique ID.
+     * @param {number} height - User's height in cm.
+     * @param {number} weight - User's weight in kg.
+     * @param {string} goal - User's health goal.
+     * @param {string} region - User's region.
+     */
+    async function fetchHealthPlan(uid, height, weight, goal, region) {
+      loadingState.classList.remove('hidden');
+      errorMessageDiv.classList.add('hidden');
+      healthPlanContent.classList.add('hidden');
+      followUpAnswer.innerHTML = ''; // Clear previous chat responses
+
+      try {
+        // Save the new data to the backend before generating the plan
+        await saveUserData(uid, height, weight, goal, region);
+
+        const response = await fetch('http://localhost:5000/generate_health_plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: uid, height, weight, goal, region })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        currentHealthPlan = data; // Store the plan
+
+        // Populate UI with data
+        // BMI Explanation Content
+        bmiExplanationElem.innerHTML = `<p class="text-gray-700 leading-relaxed">${currentHealthPlan.bmi_explanation}</p>`;
+        // Calorie Suggestions Content
+        calorieSuggestionsElem.innerHTML = `<p class="text-gray-700 leading-relaxed">${currentHealthPlan.calorie_summary}</p>`;
+        
+        healthTipElem.textContent = data.health_tip || 'N/A';
+        mealPlanElem.innerHTML = '';
+        
+        // Store the raw text for follow-up questions
+        lastHealthPlanText = `BMI Explanation: ${data.bmi_explanation}\n` +
+          `Calorie Suggestions: ${data.calorie_suggestions}\n` +
+          `Health Tip: ${data.health_tip}\n`;
+
+        if (Array.isArray(data.meal_plan)) {
+          const ul = document.createElement('ul');
+          ul.className = 'list-disc list-inside space-y-1'; // Tailwind classes for bullet points and spacing
+          data.meal_plan.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            ul.appendChild(li);
+          });
+          mealPlanElem.appendChild(ul);
+          lastHealthPlanText += `Meal Plan: ${data.meal_plan.join(', ')}\n`;
+        } else if (typeof data.meal_plan === 'string') {
+          const p = document.createElement('p');
+          p.textContent = data.meal_plan;
+          mealPlanElem.appendChild(p);
+          lastHealthPlanText += `Meal Plan: ${data.meal_plan}\n`;
+        } else {
+          mealPlanElem.textContent = 'No meal plan provided.';
+        }
+
+        loadingState.classList.add('hidden');
+        healthPlanContent.classList.remove('hidden');
+
+      } catch (error) {
+        console.error("Failed to fetch health plan:", error);
+        displayError(`Failed to load health plan: ${error.message}. Please try again later.`);
+      }
+    }
+
+    /**
+     * Sends a follow-up question to the backend based on the current health plan.
+     * @param {string} question - The user's question.
+     */
+    async function sendFollowUpQuestion(question) {
+      if (!currentUserUID || !lastHealthPlanText) {
+        followUpAnswer.innerHTML = '<p class="text-red-500">Please generate a health plan first.</p>';
+        return;
+      }
+      
+      followUpAnswer.innerHTML = '<p class="text-blue-500">Thinking...</p>';
+
+      try {
+        const response = await fetch('http://localhost:5000/health_followup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: question, context: lastHealthPlanText })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        followUpAnswer.innerHTML = `<p>${data.response}</p>`;
+      } catch (error) {
+        console.error("Failed to get follow-up response:", error);
+        followUpAnswer.innerHTML = `<p class="text-red-500">Failed to get a response. Please try again.</p>`;
+      }
+    }
+
+    // --- Event Listeners and Initialization ---
+
+    healthInputForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const height = heightInput.value;
+      const weight = weightInput.value;
+      const goal = goalInput.value;
+      const region = regionInput.value;
+
+      if (height && weight && currentUserUID) {
+        fetchHealthPlan(currentUserUID, height, weight, goal, region);
+      } else {
+        displayError("Please enter your height and weight and ensure you are logged in.");
+      }
+    });
+
+    followUpBtn.addEventListener('click', () => {
+      const question = followUpInput.value.trim();
+      if (question !== '') {
+        sendFollowUpQuestion(question);
+        followUpInput.value = '';
+      }
+    });
+
+    savePdfButton.addEventListener('click', () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(22);
+      doc.text("Your Personalized Health Plan", 105, 20, null, null, "center");
+      doc.setFontSize(12);
+
+      const content = document.getElementById('healthPlanContent');
+      doc.html(content, {
+        callback: function (doc) {
+          doc.save('Health_Plan.pdf');
+        },
+        x: 10,
+        y: 30,
+        width: 190,
+        windowWidth: 800
+      });
+    });
+
+    printButton.addEventListener('click', () => {
+      window.print();
+    });
+
+    // Authentication state change listener
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUserUID = user.uid;
+        console.log("User logged in:", currentUserUID);
+        
+        // Fetch and populate user data if available
+        const userData = await fetchUserData(currentUserUID);
+        if (userData) {
+          heightInput.value = userData.height || '';
+          weightInput.value = userData.weight || '';
+          goalInput.value = userData.goal || 'Lose weight';
+          regionInput.value = userData.region || 'India';
+          console.log("Pre-filled form with user data.");
+        }
+
+        loadingState.classList.add('hidden');
+        console.log("User data pre-filled. Waiting for user to click Generate.");
+      } else {
+        console.log("No user logged in. Waiting for user input.");
+        loadingState.classList.add('hidden');
+        displayError("Please log in to generate your health plan.");
+      }
+    });
+  </script>
+</body>
+</html>

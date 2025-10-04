@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Health AI - Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <style>
+    /*
+      The custom CSS provided in the previous turn is included here.
+      It already provides the correct mobile-first sizing for:
+      .section-heading, .card-icon, .feature-card, etc.,
+      and uses @media (min-width: 640px) for desktop overrides.
+    */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f0f4f8; /* Softer, cooler light background */
+        color:  #2c3e50; /* Darker, more professional text */
+        line-height: 1.6; /* Slightly reduced line-height for mobile density */
+        overflow-x: hidden; /* Prevent horizontal scroll on animations */
+    }
+
+    /* Base Styles (Mobile First) */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* ------------------------------------------- */
+    /* ## Section Heading (Scaling Down) */
+    /* ------------------------------------------- */
+    .section-heading {
+        font-size: 2rem; /* Reduced for mobile */
+        font-weight: 800;
+        color: #1e88e5;
+        margin-bottom: 2rem; /* Reduced margin */
+        text-align: center;
+        position: relative;
+        padding-bottom: 0.75rem;
+    }
+    .section-heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px; /* Smaller underline */
+        height: 3px;
+        background-color: #28a745;
+        border-radius: 2px;
+    }
+
+    /* ------------------------------------------- */
+    /* ## Card Icons and Features */
+    /* ------------------------------------------- */
+    .card-icon {
+        font-size: 2.5rem; /* Reduced icon size for mobile */
+        color: #28a745;
+        margin-bottom: 1rem; /* Less spacing */
+        transition: transform 0.3s ease-in-out;
+    }
+    .feature-card {
+        padding: 1.5rem; /* Reduced padding in cards */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover .card-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Lighter shadow on mobile hover */
+    }
+
+    /* ------------------------------------------- */
+    /* ## Navigation and Animations */
+    /* ------------------------------------------- */
+    html {
+        scroll-behavior: smooth;
+    }
+    .nav-link-hover::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background: #28a745;
+        transition: width .3s;
+        margin-top: 2px; /* Less margin */
+    }
+    .nav-link-hover:hover::after {
+        width: 100%;
+    }
+    /* Animations remain fine as they are not sizing-dependent */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up {
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-600 { animation-delay: 0.6s; }
+
+    /* ------------------------------------------- */
+    /* ## Hero Pattern/Background */
+    /* ------------------------------------------- */
+    .hero-pattern {
+        background-image: radial-gradient(circle at 100% 150%, #28a745, #007bff),
+                          linear-gradient(to bottom left, #28a745 0%, #007bff 100%);
+        background-blend-mode: screen;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+    }
+    .hero-pattern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zm12 10V6h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 30v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM0 14v-4h-2v4H0v2h4v4h2v-4h4v-2H6zm0 30v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM24 2V0h-2v2h-4v2h4v4h2V4h4V2h-4zm0 30v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM12 2V0H10v2H6v2h4v4h2V4h4V2h-4zm0 30v-4H10v4h-4v2h4v4h2v-4h4v-2h-4zM24 14v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 30v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM36 2V0h-2v2h-4v2h4v4h2V4h4V2h-4zM12 46v-4h-2v4H10v2h4v4h2v-4h4v-2h-4zm24 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM48 14v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM48 46v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM0 26v-4h-2v4H0v2h4v4h2v-4h4v-2H6zm0-12v-4h-2v4H0v2h4v4h2v-4h4v-2H6zM24 26v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-12v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM36 26v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-12v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM48 26v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-12v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM12 38v-4h-2v4H10v2h4v4h2v-4h4v-2h-4zm24 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        background-size: 60px 60px;
+        opacity: 0.1;
+        animation: movePattern 60s linear infinite;
+    }
+    @keyframes movePattern {
+        from { background-position: 0 0; }
+        to { background-position: 600px 600px; }
+    }
+
+    /* ------------------------------------------- */
+    /* ## Specific Card Styles */
+    /* ------------------------------------------- */
+    .update-card {
+        transition: all 0.3s ease;
+        border-left: 3px solid #1e88e5; /* Thinner border for mobile */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Lighter shadow */
+    }
+    .update-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .hero-bg {
+        background: linear-gradient(to right, #7e8990, #f0f4f8);
+    }
+    .cta-bg {
+        background: linear-gradient(to right, #1e88e5, #28a745);
+    }
+
+    .login-required-indicator {
+        font-size: 0.65em; /* Further reduced size on mobile */
+        margin-left: 0.25rem;
+        color: #dc3545;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    .text-shadow-lg {
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.7); /* Reduced shadow for mobile */
+    }
+    .text-shadow-sm {
+        text-shadow: 0.5px 0.5px 2px rgba(0,0,0,0.7);
+    }
+
+    /* ------------------------------------------- */
+    /* ## Tablet/Desktop Overrides (min-width: 640px) */
+    /* ------------------------------------------- */
+    @media (min-width: 640px) {
+        /* Section Heading */
+        .section-heading {
+            font-size: 2.8rem; /* Original size */
+            margin-bottom: 3.5rem; /* Original margin */
+            padding-bottom: 1rem;
+        }
+        .section-heading::after {
+            width: 80px; /* Original underline size */
+            height: 4px;
+        }
+        /* Card Icons */
+        .card-icon {
+            font-size: 3.5rem; /* Original size */
+            margin-bottom: 1.5rem;
+        }
+        .feature-card {
+            padding: 2rem; /* Restore desktop padding */
+        }
+        /* Update Card */
+        .update-card {
+            border-left: 5px solid #1e88e5; /* Restore desktop border thickness */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .update-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        /* Text Shadow */
+        .text-shadow-lg {
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+        .text-shadow-sm {
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+        }
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <header class="bg-white shadow-lg py-3 px-4 sm:py-5 sm:px-8 flex justify-between items-center sticky top-0 z-50">
+    <div class="flex items-center space-x-2 sm:space-x-4">
+      <i class="fas fa-pills text-2xl sm:text-3xl text-green-600"></i>
+      <span class="text-xl sm:text-3xl font-extrabold text-gray-900">Health AI</span>
+    </div>
+    <div class="relative">
+      <button id="profileBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 sm:py-2.5 sm:px-5 rounded-full shadow-lg transition duration-300 ease-in-out flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base">
+        <i class="fas fa-user-circle text-lg sm:text-xl"></i>
+        <span id="profileText" class="hidden sm:inline">Login / Sign Up</span>
+        <span id="profileTextSmall" class="inline sm:hidden">Login</span>
+      </button>
+      <div id="profileDropdown" class="absolute right-0 mt-3 w-40 sm:w-52 bg-white rounded-lg shadow-xl py-2 hidden z-10 border border-gray-200 text-sm">
+        <a href="profile.html" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">My Profile</a>
+        <a href="#" id="logoutLink" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 transition duration-200">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="bg-gray-900 text-white py-3 sm:py-4 shadow-xl">
+    <div class="container mx-auto flex flex-wrap justify-center sm:space-x-10 text-sm sm:text-lg font-medium gap-x-4 gap-y-1 px-2 sm:px-0">
+      <a href="#features" class="nav-link-hover relative pb-1">Features</a>
+      <a href="/templates/chat.html" class="nav-link-hover relative pb-1" id="navChatLink">AI Chat <span class="login-required-indicator hidden"><i class="fas fa-lock"></i></span></a>
+      <a href="health_plan.html" class="nav-link-hover relative pb-1" id="navMetricsLink">Meal Plan And BMI calculation <span class="login-required-indicator hidden"><i class="fas fa-lock"></i></span></a>
+      <a href="medicine_check.html" class="nav-link-hover relative pb-1" id="navMedicineLink">Meds Check <span class="login-required-indicator hidden"><i class="fas fa-lock"></i></span></a>
+      <a href="#updates" class="nav-link-hover relative pb-1">How It Works</a>
+      <a href="#about" class="nav-link-hover relative pb-1">About Us</a>
+    </div>
+  </nav>
+
+  <main class="flex-grow">
+
+    <section class="hero-bg py-16 sm:py-20 px-4 text-center relative overflow-hidden">
+      <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0">
+        <source src="/172784-847835577_small.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+
+      <div class="container mx-auto max-w-4xl relative z-10 text-white">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-snug sm:leading-tight mb-3 sm:mb-4 text-shadow-lg">
+          Your Personal Health Companion
+        </h1>
+        <p class="text-lg sm:text-xl md:text-2xl max-w-2xl mx-auto mb-6 sm:mb-8 text-shadow-sm">
+          Get instant health insights, check symptoms, and track your well-being with our smart AI platform.
+        </p>
+        <a href="sign_up.html" class="inline-block bg-green-600 hover:bg-green-700 text-white text-lg sm:text-xl font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+          Start Your Health Journey
+        </a>
+      </div>
+    </section>
+
+    <section id="features" class="py-16 sm:py-20 px-4 relative overflow-hidden">
+      <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-10">
+          <source src="/8449-209292163_small.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+      </video>
+
+      <div class="container mx-auto relative z-10">
+          <h2 class="section-heading text-gray-800">Powerful Features for Your Well-being</h2> 
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-8 sm:mt-12">
+              <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg feature-card text-center">
+                  <div class="text-5xl sm:text-6xl text-blue-600 mb-4 sm:mb-6">
+                      <i class="fas fa-comment-dots card-icon"></i>
+                  </div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">AI Medical Chat</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">Ask questions, discuss symptoms, and get trusted, instant advice from our AI medical assistant.</p>
+                  <a href="/templates/chat.html" class="inline-block mt-3 sm:mt-4 text-blue-600 hover:underline font-medium text-sm" id="featureChatLink">Learn More <i class="fas fa-arrow-right ml-1 text-sm"></i><span class="login-required-indicator hidden"><i class="fas fa-lock"></i></span></a>
+              </div>
+
+              <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg feature-card text-center">
+                  <div class="text-5xl sm:text-6xl text-green-600 mb-4 sm:mb-6">
+                      <i class="fas fa-chart-line card-icon"></i>
+                  </div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Health Metrics Tracker</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">Monitor your height, weight, BMI, and other key data to track your progress and goals over time.</p>
+                  <a href="health_plan.html" class="inline-block mt-3 sm:mt-4 text-blue-600 hover:underline font-medium text-sm" id="featureMetricsLink">Learn More <i class="fas fa-arrow-right ml-1 text-sm"></i><span class="login-required-indicator hidden"><i class="fas fa-lock"></i></span></a>
+              </div>
+
+              <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg feature-card text-center">
+                  <div class="text-5xl sm:text-6xl text-purple-600 mb-4 sm:mb-6">
+                      <i class="fas fa-prescription-bottle-alt card-icon"></i>
+                  </div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Medicine Checker</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">Quickly find information on medicines, check for side effects, and understand potential interactions.</p>
+                  <a href="medicine_check.html" class="inline-block mt-3 sm:mt-4 text-blue-600 hover:underline font-medium text-sm" id="featureMedicineLink">Learn More <i class="fas fa-arrow-right ml-1 text-sm"></i><span class="login-required-indicator hidden"><i class="fas fa-lock"></i></span></a>
+              </div>
+              
+              <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg feature-card text-center">
+                  <div class="text-5xl sm:text-6xl text-yellow-500 mb-4 sm:mb-6">
+                      <i class="fas fa-clipboard-list card-icon"></i>
+                  </div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-3">Personalized Profile</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">Securely store your medical history, goals, allergies, and conditions in one place.</p>
+                  <a href="profile.html" class="inline-block mt-3 sm:mt-4 text-blue-600 hover:underline font-medium text-sm" id="featureProfileLink">Learn More <i class="fas fa-arrow-right ml-1 text-sm"></i><span class="login-required-indicator hidden"><i class="fas fa-lock"></i></span></a>
+              </div>
+          </div>
+      </div>
+    </section>
+
+    <section id="updates" class="py-16 sm:py-20 px-4 bg-gray-50">
+      <div class="container mx-auto">
+          <h2 class="section-heading">How It Works</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 text-center mt-8 sm:mt-12">
+              <div class="flex flex-col items-center group relative p-4">
+                  <video poster="path/to/your/image1.jpg" muted loop playsinline class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 sm:mb-6 shadow-xl object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-1/2 -translate-x-1/2">
+                      <source src="/130591-747868243_small.mp4" type="video/mp4">
+                      Your browser does not support the video tag.
+                  </video>
+                  <div class="w-16 h-16 sm:w-20 sm:h-20 bg-blue-600 text-white text-3xl sm:text-4xl flex items-center justify-center rounded-full mb-4 sm:mb-6 shadow-xl transition-opacity duration-300 group-hover:opacity-0 relative z-10">
+                      1
+                  </div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Create Your Account</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">Sign up in seconds to get started on your health journey with us.</p>
+              </div>
+
+              <div class="flex flex-col items-center group relative p-4">
+                  <video poster="path/to/your/image2.jpg" muted loop playsinline class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 sm:mb-6 shadow-xl object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-1/2 -translate-x-1/2">
+                      <source src="/130591-747868243_small.mp4" type="video/mp4">
+                      Your browser does not support the video tag.
+                  </video>
+                  <div class="w-16 h-16 sm:w-20 sm:h-20 bg-green-600 text-white text-3xl sm:text-4xl flex items-center justify-center rounded-full mb-4 sm:mb-6 shadow-xl transition-opacity duration-300 group-hover:opacity-0 relative z-10">
+                      2
+                  </div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Build Your Profile</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">Add your health metrics, goals, and conditions to receive personalized care.</p>
+              </div>
+
+              <div class="flex flex-col items-center group relative p-4">
+                  <video poster="path/to/your/image3.jpg" muted loop playsinline class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 sm:mb-6 shadow-xl object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-1/2 -translate-x-1/2">
+                      <source src="/130591-747868243_small.mp4" type="video/mp4">
+                      Your browser does not support the video tag.
+                  </video>
+                  <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-900 text-white text-3xl sm:text-4xl flex items-center justify-center rounded-full mb-4 sm:mb-6 shadow-xl transition-opacity duration-300 group-hover:opacity-0 relative z-10">
+                      3
+                  </div>
+                  <h3 class="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">Chat & Get Insights</h3>
+                  <p class="text-gray-600 text-sm sm:text-base">Start chatting with our AI to get tailored health advice and insights.</p>
+              </div>
+          </div>
+      </div>
+    </section>
+    
+    <section id="about" class="py-16 sm:py-20 px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="section-heading">About Health AI</h2>
+            <p class="text-gray-700 mb-4 text-base sm:text-lg">
+                At Health AI, our core mission is to <b>democratize access to reliable health information</b> through the power of artificial intelligence. We believe that everyone deserves the tools and insights to make informed decisions about their well-being.
+            </p>
+            <p class="text-gray-700 text-base sm:text-lg">
+                Our platform is built on the principles of <b>accuracy, privacy, and user-centric design</b>. We leverage cutting-edge AI models to provide personalized health insights, help you understand your medications, and offer a safe space for discussing health concerns.
+            </p>
+            <p class="font-bold text-lg sm:text-xl text-green-700 mt-6 sm:mt-8">
+                Your journey to better health, intelligently guided.
+            </p>
+        </div>
+    </section>
+
+    <section class="cta-bg text-white py-12 sm:py-16 px-4 text-center">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 sm:mb-4">Ready to take the first step?</h2>
+            <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">Join thousands of users who are already benefiting from their personal health companion. Made by Souptik Mohanta Contact: souptik336@gmail.com</p>
+            <a href="sign_up.html" class="inline-block bg-white text-blue-600 hover:bg-gray-100 text-base sm:text-lg font-bold py-3 px-8 sm:py-4 sm:px-10 rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                Create Your Free Account
+            </a>
+        </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-gray-900 text-white py-6 sm:py-8 mt-10 sm:mt-16 shadow-inner">
+    <div class="container mx-auto text-center text-xs sm:text-sm">
+      <p class="mb-1 sm:mb-2">&copy; 2025 Health AI. All rights reserved.</p>
+      <p class="text-gray-400">Disclaimer: This assistant provides general health information and is not a substitute for professional medical advice. Made BY Souptik Mohanta</p>
+    </div>
+  </footer>
+
+  <script type="module" src="index.js">
+  </script>
+
+</body>
+</html>

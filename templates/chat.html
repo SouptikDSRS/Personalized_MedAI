@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Health AI - AI Medical Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="chat.css"> 
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <header class="header-footer-bg py-5 px-8 flex justify-between items-center sticky top-0 z-50">
+    <div class="flex items-center space-x-4">
+      <a href="/templates/index.html" class="flex items-center space-x-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pill text-green-600">
+          <path d="m10.5 20.5 9-9a4.24 4.24 0 0 0-6-6l-9 9a4.24 4.24 0 0 0 6 6Z"/><path d="m8 8 6 6"/>
+        </svg>
+        <span class="text-3xl font-extrabold text-gray-900">Health AI</span>
+      </a>
+    </div>
+    <div>
+      <a href="/templates/index.html" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-5 rounded-full shadow-lg transition duration-300 ease-in-out flex items-center space-x-2 transform hover:scale-105">
+        <i class="fas fa-home text-xl"></i>
+        <span>Back to Home</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="sidebar">
+      <button id="newChatButton" class="new-chat-button">
+        <i class="fas fa-plus-circle"></i> New Chat
+      </button>
+      <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">Past Sessions</h3>
+      <ul id="sessionList" class="space-y-2 text-gray-700"></ul>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2 class="text-3xl font-bold text-blue-700 mb-1">
+          <i class="fas fa-robot mr-2"></i> AI Health Assistant
+        </h2>
+        <p class="text-gray-600">Ask your health queries. Chat privately with our AI.</p>
+      </div>
+
+      <div id="chatBox" class="chat-box">
+        <div class="message-bubble ai">
+          <div class="formatted-ai-response bg-gray-100 p-4 rounded-lg shadow-md space-y-4 text-sm text-gray-800">
+            <p>Hello! How can I assist you with your health today?</p>
+          </div>
+          <span class="timestamp">AI - <span class="current-time"></span></span>
+        </div>
+      </div>
+
+      <form id="chatForm" onsubmit="handleChatSubmit(event)" class="chat-input-form">
+        <div class="chat-input-group">
+          <input type="text" name="message" id="chatInput" placeholder="Type your health question here..." required />
+          <button type="submit" class="send-button" id="sendButton">
+            <i class="fas fa-paper-plane"></i> Send
+          </button>
+        </div>
+        <div id="chatMessage" class="info-message hidden"></div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer-bg py-6 mt-auto shadow-inner">
+    <div class="container mx-auto text-center text-sm">
+      <p class="mb-2">&copy; 2025 Health AI. All rights reserved.</p>
+      <p class="text-gray-400">Disclaimer: This assistant provides general health information and is not a substitute for professional medical advice. Always consult a healthcare provider for diagnosis and treatment.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="chat.js"></script>
+</body>
+</html>

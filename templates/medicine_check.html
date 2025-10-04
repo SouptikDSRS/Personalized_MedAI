@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vibrant Medicine Checker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap"
+    rel="stylesheet"
+/>
+<style>
+    /* Global Styles & Variables */
+    :root {
+        --primary-purple: #8e44ad;
+        --secondary-teal: #1abc9c;
+        --accent-orange: #f39c12;
+        --light-bg: #ecf0f1;
+        --card-bg: #ffffff;
+        --text-color: #2c3e50;
+        --light-text: #7f8c8d;
+        --shadow-dynamic: rgba(44, 62, 80, 0.15);
+    }
+    body {
+        font-family: 'Fredoka', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #a7e0f2, #f9c7e0);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .container {
+        width: 100%;
+        max-width: 900px;
+        padding: 30px;
+        background-color: var(--card-bg);
+        border-radius: 20px;
+        box-shadow: 0 15px 40px var(--shadow-dynamic);
+        transition: transform 0.3s ease;
+    }
+    .container:hover {
+        transform: translateY(-5px);
+    }
+    h1 {
+        text-align: center;
+        font-weight: 600;
+        font-size: 2.5rem;
+        color: var(--primary-purple);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    /* Search Input with Autocomplete & Button */
+    .search-container {
+        position: relative;
+        margin-bottom: 30px;
+        display: flex;
+        gap: 10px; /* Spacing between input and button */
+    }
+    #medicineInput {
+        flex-grow: 1; /* Allows the input to take up available space */
+        padding: 15px 25px;
+        font-size: 18px;
+        border: 2px solid var(--primary-purple);
+        border-radius: 50px;
+        background: var(--light-bg);
+        color: var(--text-color);
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+    #medicineInput::placeholder {
+        color: var(--light-text);
+        opacity: 0.8;
+    }
+    #medicineInput:focus {
+        outline: none;
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 0 5px rgba(243, 156, 18, 0.2);
+    }
+    #searchBtn {
+        padding: 0 30px; /* Adjusted padding to match input height */
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        background-color: var(--primary-purple);
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+    #searchBtn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        background-color: #6c3483;
+    }
+    .autocomplete-suggestions {
+        position: absolute;
+        top: calc(100% + 5px); /* Position it below the input/button */
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        border: 1px solid var(--light-bg);
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 10;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px var(--shadow-dynamic);
+    }
+    .autocomplete-suggestion {
+        padding: 15px 25px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .autocomplete-suggestion:hover {
+        background-color: var(--primary-purple);
+        color: #fff;
+    }
+
+    /* Result Sections as Colorful Cards */
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+    }
+    .result-section {
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    .result-section:hover {
+        transform: translateY(-3px);
+    }
+    #infoSection { background: #e8f9f8; }
+    #sideEffectsSection { background: #ffebee; }
+    #interactionsSection { background: #fdf5e6; }
+    #warningsSection { background: #e6f7ff; }
+
+    .result-section h2 {
+        margin-top: 0;
+        font-weight: 600;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    #infoSection h2 { color: #1abc9c; }
+    #sideEffectsSection h2 { color: #e74c3c; }
+    #interactionsSection h2 { color: #f39c12; }
+    #warningsSection h2 { color: #3498db; }
+
+    .result-section p {
+        margin: 10px 0;
+        font-weight: 500;
+        color: var(--text-color);
+    }
+    .result-section p strong {
+        color: var(--light-text);
+        font-weight: 500;
+    }
+    #medWarnings li {
+        margin-bottom: 8px;
+    }
+
+    /* Buttons */
+    .buttons {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    .buttons button {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .buttons button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+    #addToListBtn {
+        background-color: var(--secondary-teal);
+    }
+    #compareBtn {
+        background-color: var(--primary-purple);
+    }
+
+    /* Loading and Message States */
+    #loader {
+        display: none;
+        text-align: center;
+        font-size: 20px;
+        color: var(--primary-purple);
+        margin: 20px 0;
+        animation: pulse 1.5s infinite ease-in-out;
+    }
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    .message {
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 12px;
+        text-align: center;
+        font-weight: 600;
+        transition: opacity 0.3s ease;
+        border: 2px solid;
+    }
+    .error-message {
+        background-color: #fcebeb;
+        color: #e74c3c;
+        border-color: #e74c3c;
+    }
+    .success-message {
+        background-color: #e8f9f8;
+        color: #1abc9c;
+        border-color: #1abc9c;
+    }
+    .hidden {
+        display: none;
+    }
+
+    /* Media Queries for better responsiveness */
+    @media (max-width: 768px) {
+        body { padding: 10px; }
+        .container { padding: 20px; border-radius: 15px; }
+        h1 { font-size: 2rem; }
+        .search-container { flex-direction: column; gap: 15px; }
+        #searchBtn { width: 100%; padding: 15px; }
+        .result-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>💊 Medicine Checker</h1>
+
+    <div class="search-container">
+        <input type="text" id="medicineInput" placeholder="Find a medicine..." />
+        <button id="searchBtn">Search</button>
+        <div id="autocompleteList" class="autocomplete-suggestions hidden"></div>
+    </div>
+
+    <div id="loader">⏳ Loading...</div>
+    <div id="messageDisplay" class="message hidden"></div>
+
+    <div id="medicineResult" class="hidden">
+        <div class="result-grid">
+            <div class="result-section" id="infoSection">
+                <h2><span class="icon">✨</span> Medicine Info</h2>
+                <p><strong>Name & Brand:</strong> <span id="medName"></span></p>
+                <p><strong>Description / Uses:</strong> <span id="medDescription"></span></p>
+                <p><strong>Dosage:</strong> <span id="medDosage"></span></p>
+            </div>
+
+            <div class="result-section" id="sideEffectsSection">
+                <h2><span class="icon">🚨</span> Side Effects</h2>
+                <p><strong>Common:</strong> <span id="medSideCommon"></span></p>
+                <p><strong>Serious:</strong> <span id="medSideSerious"></span></p>
+            </div>
+
+            <div class="result-section" id="interactionsSection">
+                <h2><span class="icon">🤝</span> Interactions</h2>
+                <div id="medInteractions"></div>
+            </div>
+
+            <div class="result-section" id="warningsSection">
+                <h2><span class="icon">❗</span> Warnings / Precautions</h2>
+                <ul id="medWarnings"></ul>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button id="addToListBtn">Add to My List</button>
+            <button id="compareBtn">Compare</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('medicineInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const autocompleteList = document.getElementById('autocompleteList');
+    const loader = document.getElementById('loader');
+    const messageDisplay = document.getElementById('messageDisplay');
+    const medicineResultDiv = document.getElementById('medicineResult');
+
+    const medName = document.getElementById('medName');
+    const medDescription = document.getElementById('medDescription');
+    const medDosage = document.getElementById('medDosage');
+    const medSideCommon = document.getElementById('medSideCommon');
+    const medSideSerious = document.getElementById('medSideSerious');
+    const medInteractions = document.getElementById('medInteractions');
+    const medWarnings = document.getElementById('medWarnings');
+
+    function showMessage(message, type = 'error') {
+        messageDisplay.className = `message ${
+            type === 'error' ? 'error-message' : 'success-message'
+        }`;
+        messageDisplay.textContent = message;
+        setTimeout(() => (messageDisplay.className = 'message hidden'), 4000);
+    }
+
+    // Sample autocomplete (replace with API call for real data)
+    const sampleMedicines = ["Paracetamol", "Ibuprofen", "Amoxicillin", "Metformin", "Aspirin"];
+    
+    // New function to handle the search action
+    function handleSearch() {
+        fetchMedicineData(input.value);
+        autocompleteList.classList.add('hidden');
+    }
+
+    // Event listener for the new Search button
+    searchBtn.addEventListener('click', handleSearch);
+
+    input.addEventListener('input', () => {
+        const val = input.value.toLowerCase();
+        autocompleteList.innerHTML = '';
+        if (!val) {
+            autocompleteList.classList.add('hidden');
+            return;
+        }
+        const matches = sampleMedicines.filter((med) =>
+            med.toLowerCase().includes(val)
+        );
+        matches.forEach((med) => {
+            const div = document.createElement('div');
+            div.className = 'autocomplete-suggestion';
+            div.textContent = med;
+            div.addEventListener('click', () => {
+                input.value = med;
+                autocompleteList.classList.add('hidden');
+                fetchMedicineData(med);
+            });
+            autocompleteList.appendChild(div);
+        });
+        autocompleteList.classList.toggle('hidden', matches.length === 0);
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSearch();
+            autocompleteList.classList.add('hidden');
+        }
+    });
+
+    // Fetch medicine data from server
+    async function fetchMedicineData(medNameInput) {
+        if (!medNameInput)
+            return showMessage('Please enter a medicine name.', 'error');
+        loader.style.display = 'block';
+        medicineResultDiv.classList.add('hidden');
+        try {
+            const response = await fetch('http://127.0.0.1:5000/check_medicine', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ medicine: medNameInput }),
+            });
+            if (!response.ok) throw new Error('Server error');
+            const data = await response.json();
+            loader.style.display = 'none';
+            if (data.result) {
+                const med = data.result;
+                medicineResultDiv.classList.remove('hidden');
+                medName.textContent = med.name || medNameInput;
+                medDescription.textContent = med.description || 'N/A';
+                medDosage.textContent = med.dosage || 'N/A';
+                medSideCommon.textContent = (med.sideEffects && med.sideEffects.common) || 'N/A';
+                medSideSerious.textContent = (med.sideEffects && med.sideEffects.serious) || 'N/A';
+
+                if (med.interactions && med.interactions.length > 0) {
+                    medInteractions.innerHTML = med.interactions.map(
+                        (i) => `<p><strong>${i.drug}:</strong> ${i.interaction}</p>`
+                    ).join('');
+                } else {
+                    medInteractions.innerHTML = '<p>No interactions listed.</p>';
+                }
+
+                medWarnings.innerHTML = (med.warnings || []).map((w) => `<li>${w}</li>`).join('');
+                showMessage('✅ Medicine info loaded.', 'success');
+            } else {
+                showMessage('❌ ' + (data.error || 'No info found'), 'error');
+            }
+        } catch (err) {
+            loader.style.display = 'none';
+            showMessage('⚠️ Server error or connection issue.', 'error');
+            console.error(err);
+        }
+    }
+</script>
+</body>
+</html>

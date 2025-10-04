@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health AI - My Profile</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Poppins for a modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body class="bg-gray-100">
+
+  <!-- Header Section -->
+  <header class="bg-white shadow-lg py-5 px-8 flex justify-between items-center sticky top-0 z-50">
+    <div class="flex items-center space-x-4">
+      <a href="index.html" class="flex items-center space-x-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pill text-green-600">
+          <path d="m10.5 20.5 9-9a4.24 4.24 0 0 0-6-6l-9 9a4.24 4.24 0 0 0 6 6Z"/><path d="m8 8 6 6"/>
+        </svg>
+        <span class="text-3xl font-extrabold text-gray-900">Health AI</span>
+      </a>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div>
+      <a href="index.html" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-5 rounded-full shadow-lg transition duration-300 ease-in-out flex items-center space-x-2 transform hover:scale-105">
+        <i class="fas fa-home text-xl"></i>
+        <span>Back to Home</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow container mx-auto px-4 py-12">
+    <h1 class="section-heading text-center mb-10">My Profile</h1>
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl p-8 card-shadow transition-all card-hover">
+      <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
+        <div class="flex items-center space-x-4">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-3xl font-bold">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div>
+            <h2 id="profileNameDisplay" class="text-3xl font-bold text-gray-800">Loading...</h2>
+            <p id="profileEmailDisplay" class="text-gray-600">Loading...</p>
+          </div>
+        </div>
+        <button id="editProfileBtn" class="btn btn-outline flex items-center gap-2">
+          <i class="fas fa-edit"></i> Edit Profile
+        </button>
+      </div>
+
+      <!-- Profile Information Form (Editable) -->
+      <form id="profileForm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          <div class="input-group">
+            <input type="text" id="fullName" placeholder=" " disabled>
+            <label for="fullName">Full Name</label>
+          </div>
+          <div class="input-group">
+            <input type="email" id="email" placeholder=" " disabled>
+            <label for="email">Email Address</label>
+          </div>
+          <div class="input-group">
+            <input type="date" id="dateOfBirth" placeholder=" " disabled>
+            <label for="dateOfBirth">Date of Birth</label>
+          </div>
+          <div class="input-group">
+            <select id="gender" class="w-full" disabled>
+              <option value="" disabled selected>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+            <label for="gender">Gender</label>
+          </div>
+          <div class="input-group">
+            <input type="number" id="height" placeholder=" " disabled>
+            <label for="height">Height (cm)</label>
+          </div>
+          <div class="input-group">
+            <input type="number" id="weight" placeholder=" " disabled>
+            <label for="weight">Weight (kg)</label>
+          </div>
+          <div class="input-group">
+            <input type="text" id="bmi" placeholder=" " disabled>
+            <label for="bmi">BMI</label>
+          </div>
+          <div class="input-group">
+            <select id="activityLevel" class="w-full" disabled>
+              <option value="" disabled selected>Select Activity Level</option>
+              <option value="Sedentary">Sedentary (little or no exercise)</option>
+              <option value="Lightly Active">Lightly Active (light exercise/sports 1-3 days/week)</option>
+              <option value="Moderately Active">Moderately Active (moderate exercise/sports 3-5 days/week)</option>
+              <option value="Very Active">Very Active (hard exercise/sports 6-7 days a week)</option>
+              <option value="Extra Active">Extra Active (very hard exercise/physical job)</option>
+            </select>
+            <label for="activityLevel">Activity Level</label>
+          </div>
+          <div class="input-group md:col-span-2">
+            <textarea id="healthGoals" rows="3" placeholder=" " class="w-full" disabled></textarea>
+            <label for="healthGoals">Health Goals (e.g., Lose weight, gain muscle, improve endurance)</label>
+          </div>
+          <div class="input-group md:col-span-2">
+            <textarea id="allergies" rows="3" placeholder=" " class="w-full" disabled></textarea>
+            <label for="allergies">Allergies (e.g., Peanuts, Penicillin, Dust)</label>
+          </div>
+          <div class="input-group md:col-span-2">
+            <textarea id="preExistingConditions" rows="3" placeholder=" " class="w-full" disabled></textarea>
+            <label for="preExistingConditions">Pre-existing Conditions (e.g., Diabetes, Hypertension, Asthma)</label>
+          </div>
+          <div class="input-group">
+            <input type="text" id="lastUpdated" placeholder=" " disabled>
+            <label for="lastUpdated">Last Updated</label>
+          </div>
+        </div>
+
+        <div id="formActions" class="flex justify-end space-x-4 mt-8 hidden">
+          <button type="button" id="cancelEditBtn" class="btn btn-outline">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+
+      <!-- Health AI Insights Section -->
+      <div class="mt-12 pt-8 border-t border-gray-200">
+        <h3 class="section-heading text-center mb-6">Your Health AI Insights</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-gray-50 p-6 rounded-lg card-shadow transition-all hover:shadow-md">
+            <h4 class="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <i class="fas fa-comments text-green-600"></i> Medical Chat History
+            </h4>
+            <p class="text-gray-600 mb-4">Review your past conversations with the AI Medical Chat.</p>
+            <a href="chat-history.html" class="text-blue-600 hover:underline font-medium">View History <i class="fas fa-arrow-right ml-1 text-sm"></i></a>
+          </div>
+          <div class="bg-gray-50 p-6 rounded-lg card-shadow transition-all hover:shadow-md">
+            <h4 class="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <i class="fas fa-chart-bar text-blue-600"></i> Body Metrics Trends
+            </h4>
+            <p class="text-gray-600 mb-4">See your body metric trends and detailed AI suggestions.</p>
+            <a href="body-calculator.html" class="text-blue-600 hover:underline font-medium">Analyze Trends <i class="fas fa-arrow-right ml-1 text-sm"></i></a>
+          </div>
+          <div class="bg-gray-50 p-6 rounded-lg card-shadow transition-all hover:shadow-md">
+            <h4 class="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <i class="fas fa-pills text-green-600"></i> Saved Medicine Checks
+            </h4>
+            <p class="text-gray-600 mb-4">Access your history of checked medications and their details.</p>
+            <a href="medicine-check-history.html" class="text-blue-600 hover:underline font-medium">View Saved Checks <i class="fas fa-arrow-right ml-1 text-sm"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="bg-gray-900 text-white py-6 mt-12 shadow-inner">
+    <div class="container mx-auto text-center text-sm">
+      <p class="mb-2">&copy; 2025 Health AI. All rights reserved.</p>
+      <p class="text-gray-400">Disclaimer: This assistant provides general health information and is not a substitute for professional medical advice. Always consult a healthcare provider for diagnosis and treatment.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="profile.js">  </script>
+</body>
+</html>
