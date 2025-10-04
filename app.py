@@ -12,11 +12,15 @@ import traceback
 import re
 
 
-load_dotenv()
-cred_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+firebase_json = os.getenv("FIREBASE_CREDENTIALS_JSON")
 if not firebase_admin._apps:
-    cred = credentials.Certificate(cred_path)
-    firebase_admin.initialize_app(cred)
+    if firebase_json:
+        cred_dict = json.loads(firebase_json)
+        cred = credentials.Certificate(cred_dict)
+        firebase_admin.initialize_app(cred)
+    else:
+        raise Exception("FIREBASE_CREDENTIALS_JSON not found in environment variables.")
+
 
 db = firestore.client()
 
