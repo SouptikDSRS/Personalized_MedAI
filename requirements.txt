@@ -13,8 +13,5 @@ werkzeug
 easyocr
 torch
 firebase-admin
-python-dotenv
-fastapi
-uvicorn
 requests
-
+gunicorn
